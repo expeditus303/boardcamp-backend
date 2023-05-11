@@ -10,9 +10,14 @@ function badRequest( message = "Bad Request"){
     return errorCreator ("BadRequestError", message)
 }
 
+function notFound(message = "Not Found"){
+    return errorCreator("NotFoundError", message)
+}
+
 const error = {
     conflit,
-    badRequest
+    badRequest,
+    notFound
 }
 
 export default error

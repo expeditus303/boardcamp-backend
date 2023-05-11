@@ -8,8 +8,13 @@ const create = joi.object({
         birthday: joi.date().required()
 })
 
+const getById = joi.object({
+    id: joi.number()
+})
+
 const customersSchemas = {
     create,
+    getById
 }
 
 export default customersSchemas

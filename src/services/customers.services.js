@@ -6,6 +6,15 @@ async function getAll() {
     return customers
 }
 
+async function getById(id) {
+    const {rows: customerRow} = await customersRepositories.getById(id)
+    const [customer] = customerRow
+
+    if (!customer) throw error.notFound()
+
+    return customer
+}
+
 async function create(body) {
     const { name, phone, cpf, birthday } = body
 
@@ -16,10 +25,22 @@ async function create(body) {
     return await customersRepositories.create(name, phone, cpf, birthday)
 }
 
+async function update(id, body) {
+    const { name, phone, cpf, birthday } = body
 
-const customersService = {
-    getAll,
-    create,
+    const { rows: existingCustomerCpf } = await customersRepositories.findByIdAndCpf(id, cpf)
+
+    if (existingCustomerCpf[0]) throw error.conflit()
+
+    return await customersRepositories.update(id, name, phone, cpf, birthday)    
 }
 
-export default customersService
+
+const customersServices = {
+    getAll,
+    getById,
+    create,
+    update
+}
+
+export default customersServices
