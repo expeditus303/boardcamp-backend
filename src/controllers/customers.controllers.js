@@ -1,6 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 import customersService from '../services/customers.services.js';
 
+
+async function getAll(req, res, next) {
+
+  try {
+
+    const customers = await customersService.getAll()
+
+    res.status(StatusCodes.OK).send(customers)
+  } catch (err) {
+    next(err)
+  }
+
+}
+
 async function create(req, res, next) {
 
     const { body } = req
@@ -17,7 +31,8 @@ async function create(req, res, next) {
 }
 
 const customersControllers = {
-    create,
+  getAll,  
+  create
 }
 
 export default customersControllers

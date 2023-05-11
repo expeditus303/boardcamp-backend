@@ -1,6 +1,11 @@
 import error from "../errors/errors.js"
 import customersRepositories from "../repositories/customers.repositories.js"
 
+async function getAll() {
+    const {rows: customers} = await customersRepositories.getAll()
+    return customers
+}
+
 async function create(body) {
     const { name, phone, cpf, birthday } = body
 
@@ -13,6 +18,7 @@ async function create(body) {
 
 
 const customersService = {
+    getAll,
     create,
 }
 

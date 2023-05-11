@@ -1,5 +1,9 @@
 import db from "../config/database.connection.js";
 
+function getAll(){
+    return db.query(`SELECT * FROM customers`)
+}
+
 function findByCpf(cpf){
     return db.query(`SELECT * FROM customers WHERE cpf = $1` , [cpf])
 }
@@ -9,6 +13,7 @@ function create(name, phone, cpf, birthday) {
 }
 
 const customersRepositories = {
+    getAll,
     findByCpf,
     create
 }
