@@ -5,6 +5,7 @@ import gamesControllers from "../controllers/games.controllers.js";
 
 const gamesRoutes = Router()
 
+gamesRoutes.get("/games", gamesControllers.getAll)
 gamesRoutes.post("/games", schemasMiddleware(gamesSchemas.create), gamesControllers.create)
 
 export default gamesRoutes

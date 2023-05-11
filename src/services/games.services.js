@@ -1,6 +1,12 @@
 import error from "../errors/errors.js"
 import gamesRepositories from "../repositories/games.repositories.js"
 
+async function getAll(){
+    const {rows: games} = await gamesRepositories.getAll()
+
+    return games
+}
+
 async function create(body) {
     const { name, image, stockTotal, pricePerDay } = body
 
@@ -12,7 +18,8 @@ async function create(body) {
 }
 
 const gamesServices = {
-    create
+    getAll,
+    create,
 }
 
 export default gamesServices
