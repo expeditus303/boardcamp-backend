@@ -6,8 +6,13 @@ const create = joi.object({
   daysRented: joi.number().positive().integer().required(),
 });
 
+const rentalId = joi.object({
+  id: joi.number()
+})
+
 const rentalsSchemas = {
-  create
+  create,
+  rentalId
 }
 
 export default rentalsSchemas

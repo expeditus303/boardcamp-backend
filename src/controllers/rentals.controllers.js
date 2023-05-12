@@ -26,9 +26,23 @@ async function create(req, res, next){
     }
 }
 
+async function returnGame(req, res, next){
+    const { id } = req.params
+
+    try {
+
+        await rentalsServices.returnGame(id)
+
+        return res.sendStatus(StatusCodes.OK)
+    } catch (err) {
+        next(err)
+    }
+}
+
 const rentalsControllers = {
     getAll,
     create,
+    returnGame,
 }
 
 export default rentalsControllers

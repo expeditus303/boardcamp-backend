@@ -14,9 +14,6 @@ async function create(body){
     const {rows: [existingGame]} = await rentalsRepositories.findGameById(gameId)
     const {rows: [existingUser]} = await rentalsRepositories.findCustomerById(customerId)
 
-    console.log("aqui")
-    console.log(existingGame)
-
     if(!existingGame || !existingUser || !existingGame.stockTotal > 0) throw error.badRequest()
 
     const { pricePerDay } = existingGame
@@ -36,9 +33,21 @@ async function create(body){
     return await rentalsRepositories.create(rental)
 }
 
+async function returnGame(id){
+
+    const {rows: [existingRental]} = await rentalsRepositories.findRentalById(id)
+
+    if(!existingRental) throw error.notFound()
+
+    if(existingRental.returnDate !== null) throw error.badRequest()
+
+    return await rentalsRepositories.updateRentalById(id)
+}
+
 const rentalsServices = {
     getAll,
     create,
+    returnGame,
 }
 
 export default rentalsServices

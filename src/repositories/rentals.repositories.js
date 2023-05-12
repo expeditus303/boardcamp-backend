@@ -3,8 +3,8 @@ import db from "../config/database.connection.js";
 function getAll() {
   return db.query(`
     SELECT r.*, 
-        json_build_object('id', c.id, 'name', c.name) AS customer, 
-        json_build_object('id', g.id, 'name', g.name) AS game 
+        jsonb_build_object('id', c.id, 'name', c.name) AS customer, 
+        jsonb_build_object('id', g.id, 'name', g.name) AS game 
     FROM rentals AS r 
     JOIN customers AS c ON r."customerId" = c.id
     JOIN games AS g ON r."gameId" = g.id
@@ -37,11 +37,34 @@ function create(rental) {
   );
 }
 
+function findRentalById(id){
+    return db.query(`SELECT * FROM rentals WHERE id=$1`, [id])
+}
+
+function updateRentalById(id){
+    return db.query(`
+    UPDATE rentals
+    SET "returnDate" = CASE  
+            WHEN "returnDate" IS NULL THEN
+                NOW()
+            ELSE "returnDate"
+        END,
+        "delayFee" = CASE
+            WHEN CURRENT_DATE > ("rentDate" + "daysRented") THEN
+                ("originalPrice" / "daysRented") * (CURRENT_DATE - ("rentDate" + "daysRented"))
+            ELSE "delayFee"
+        END
+    WHERE rentals.id = $1;
+    `, [id])
+}
+
 const rentalsRepositories = {
     getAll,
     findGameById,
     findCustomerById,
     create,
+    findRentalById,
+    updateRentalById
 };
 
 export default rentalsRepositories;
