@@ -7,6 +7,7 @@ const rentalsRoutes = Router()
 
 rentalsRoutes.get("/rentals", rentalsControllers.getAll)
 rentalsRoutes.post("/rentals", schemasMiddleware(rentalsSchemas.create), rentalsControllers.create)
-rentalsRoutes.post("/rentals/:id/return", schemasMiddleware(rentalsSchemas.rentalId, "params"), rentalsControllers.returnGame)
+rentalsRoutes.post("/rentals/:id/return", schemasMiddleware(rentalsSchemas.rentalId, "params"), rentalsControllers.closeRental)
+rentalsRoutes.delete("/rentals/:id", schemasMiddleware(rentalsSchemas.rentalId, "params"), rentalsControllers.deleteRental)
 
 export default rentalsRoutes

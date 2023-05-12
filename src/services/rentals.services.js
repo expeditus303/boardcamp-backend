@@ -33,7 +33,7 @@ async function create(body){
     return await rentalsRepositories.create(rental)
 }
 
-async function returnGame(id){
+async function closeRental(id){
 
     const {rows: [existingRental]} = await rentalsRepositories.findRentalById(id)
 
@@ -44,10 +44,22 @@ async function returnGame(id){
     return await rentalsRepositories.updateRentalById(id)
 }
 
+async function deleteRental(id) {
+
+    const {rows: [existingRental]} = await rentalsRepositories.findRentalById(id)
+
+    if(!existingRental) throw error.notFound()
+
+    if(existingRental.returnDate === null) throw error.badRequest()
+
+    return await rentalsRepositories.deleteRentalById(id)
+}
+
 const rentalsServices = {
     getAll,
     create,
-    returnGame,
+    closeRental,
+    deleteRental
 }
 
 export default rentalsServices

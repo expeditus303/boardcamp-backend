@@ -26,14 +26,26 @@ async function create(req, res, next){
     }
 }
 
-async function returnGame(req, res, next){
+async function closeRental(req, res, next){
     const { id } = req.params
 
     try {
 
-        await rentalsServices.returnGame(id)
+        await rentalsServices.closeRental(id)
 
         return res.sendStatus(StatusCodes.OK)
+    } catch (err) {
+        next(err)
+    }
+}
+
+async function deleteRental(req, res, next){
+    const { id } = req.params
+
+    try {
+        await rentalsServices.deleteRental(id)
+
+        res.sendStatus(StatusCodes.OK)
     } catch (err) {
         next(err)
     }
@@ -42,7 +54,8 @@ async function returnGame(req, res, next){
 const rentalsControllers = {
     getAll,
     create,
-    returnGame,
+    closeRental,
+    deleteRental
 }
 
 export default rentalsControllers

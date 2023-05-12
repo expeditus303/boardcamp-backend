@@ -58,13 +58,18 @@ function updateRentalById(id){
     `, [id])
 }
 
+function deleteRentalById(id){
+    return db.query(`DELETE FROM rentals WHERE id=$1`, [id])
+}
+
 const rentalsRepositories = {
     getAll,
     findGameById,
     findCustomerById,
     create,
     findRentalById,
-    updateRentalById
+    updateRentalById,
+    deleteRentalById
 };
 
 export default rentalsRepositories;
