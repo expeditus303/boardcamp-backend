@@ -1,6 +1,13 @@
 import error from "../errors/errors.js"
 import rentalsRepositories from "../repositories/rentals.repositories.js"
 
+async function getAll() {
+
+    const {rows: rentals} = await rentalsRepositories.getAll()
+    
+    return rentals
+}
+
 async function create(body){
     const { customerId, gameId, daysRented} = body
 
@@ -30,7 +37,8 @@ async function create(body){
 }
 
 const rentalsServices = {
-    create
+    getAll,
+    create,
 }
 
 export default rentalsServices
