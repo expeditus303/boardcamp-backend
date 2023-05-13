@@ -1,11 +1,11 @@
 import db from "../config/database.connection.js";
 
 function getAll(){
-    return db.query(`SELECT * FROM customers`)
+    return db.query(`SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`)
 }
 
 function getById(id) {
-    return db.query(`SELECT * FROM customers WHERE id=$1`, [id] )
+    return db.query(`SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers WHERE id=$1`, [id] )
 }
 
 function findByCpf(cpf){

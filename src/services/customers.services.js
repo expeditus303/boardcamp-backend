@@ -7,8 +7,7 @@ async function getAll() {
 }
 
 async function getById(id) {
-    const {rows: customerRow} = await customersRepositories.getById(id)
-    const [customer] = customerRow
+    const {rows: [customer]} = await customersRepositories.getById(id)
 
     if (!customer) throw error.notFound()
 
