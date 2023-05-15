@@ -22,7 +22,7 @@ function getAll(status, startDate, order, desc, limit, offset) {
   }
 
   if (whereClause && startDate){
-    whereClause += `AND r."rentDate" > '${startDate}'`
+    whereClause += ` AND r."rentDate" > '${startDate}'`
   } else if (!whereClause && startDate) {
     whereClause = `WHERE r."rentDate" > '${startDate}'`
   }
