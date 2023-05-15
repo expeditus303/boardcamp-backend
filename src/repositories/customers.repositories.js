@@ -4,7 +4,7 @@ function getAll(order, desc, limit, offset){
     return db.query(`
     SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday 
     FROM customers
-    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
+    ORDER BY customers."${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $1
     OFFSET $2
     `, [limit, offset])
