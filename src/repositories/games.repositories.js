@@ -1,7 +1,19 @@
 import db from "../config/database.connection.js";
 
-function getAll(){
-    return db.query(`SELECT * FROM games`)
+function getAll(limit, offset){
+    return db.query(`
+    SELECT * FROM games 
+    LIMIT $1
+    OFFSET $2`, [limit, offset])
+}
+
+function getGameByName(gameName, limit, offset){
+    return db.query(`
+    SELECT * FROM games 
+    WHERE name ILIKE $1 || '%'
+    LIMIT $2
+    OFFSET $3
+    `, [gameName, limit, offset])
 }
 
 function findByName(name){
@@ -14,6 +26,7 @@ function create(name, image, stockTotal, pricePerDay) {
 
 const gamesRepositories = {
     getAll,
+    getGameByName,
     findByName,
     create
 }

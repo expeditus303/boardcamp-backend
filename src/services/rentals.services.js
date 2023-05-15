@@ -1,9 +1,15 @@
 import error from "../errors/errors.js"
 import rentalsRepositories from "../repositories/rentals.repositories.js"
 
-async function getAll() {
+async function get(customerId, gameId, limit, offset) {
 
-    const {rows: rentals} = await rentalsRepositories.getAll()
+    if (customerId || gameId) {
+        const {rows: rentals} = await rentalsRepositories.getRentalById(customerId, gameId, limit, offset)
+        
+        return rentals    
+    }
+
+    const {rows: rentals} = await rentalsRepositories.getAll(limit, offset)
     
     return rentals
 }
@@ -58,7 +64,7 @@ async function deleteRental(id) {
 }
 
 const rentalsServices = {
-    getAll,
+    get,
     create,
     closeRental,
     deleteRental

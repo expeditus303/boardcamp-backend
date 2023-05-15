@@ -1,6 +1,7 @@
 import db from "../config/database.connection.js";
 
-function getAll() {
+function getAll(limit, offset) {
+
   return db.query(`
     SELECT r.*, 
         jsonb_build_object('id', c.id, 'name', c.name) AS customer, 
@@ -8,7 +9,24 @@ function getAll() {
     FROM rentals AS r 
     JOIN customers AS c ON r."customerId" = c.id
     JOIN games AS g ON r."gameId" = g.id
-    `);
+    LIMIT $1
+    OFFSET $2
+    `, [limit, offset]);
+}
+
+function getRentalById(customerId, gameId, limit, offset) {
+  return db.query(`
+    SELECT r.*, 
+        jsonb_build_object('id', c.id, 'name', c.name) AS customer, 
+        jsonb_build_object('id', g.id, 'name', g.name) AS game 
+    FROM rentals AS r 
+    JOIN customers AS c ON r."customerId" = c.id
+    JOIN games AS g ON r."gameId" = g.id
+    WHERE r."customerId" = $1
+      OR r."gameId" = $2
+    LIMIT $3
+    OFFSET $4
+    `, [customerId, gameId, limit, offset]);
 }
 
 function findGameById(gameId) {
@@ -70,6 +88,7 @@ function deleteRentalById(id){
 
 const rentalsRepositories = {
     getAll,
+    getRentalById,
     findGameById,
     findCustomerById,
     create,

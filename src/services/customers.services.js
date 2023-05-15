@@ -1,13 +1,21 @@
 import error from "../errors/errors.js"
 import customersRepositories from "../repositories/customers.repositories.js"
 
-async function getAll() {
-    const {rows: customers} = await customersRepositories.getAll()
-    return customers
+async function get(cpf, limit, offset) {
+
+    if (cpf) {
+        const { rows: customers } = await customersRepositories.getCustomerByCpf(cpf, limit, offset)
+        return customers
+
+    } else {
+        const { rows: customers } = await customersRepositories.getAll(limit, offset)
+        return customers
+    }
+
 }
 
 async function getById(id) {
-    const {rows: [customer]} = await customersRepositories.getById(id)
+    const { rows: [customer] } = await customersRepositories.getById(id)
 
     if (!customer) throw error.notFound()
 
@@ -31,12 +39,12 @@ async function update(id, body) {
 
     if (existingCustomerCpf[0]) throw error.conflit()
 
-    return await customersRepositories.update(id, name, phone, cpf, birthday)    
+    return await customersRepositories.update(id, name, phone, cpf, birthday)
 }
 
 
 const customersServices = {
-    getAll,
+    get,
     getById,
     create,
     update

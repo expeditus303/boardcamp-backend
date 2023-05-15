@@ -1,7 +1,22 @@
 import db from "../config/database.connection.js";
 
-function getAll(){
-    return db.query(`SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday FROM customers`)
+function getAll(limit, offset){
+    return db.query(`
+    SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday 
+    FROM customers
+    LIMIT $1
+    OFFSET $2
+    `, [limit, offset])
+}
+
+function getCustomerByCpf(cpf, limit, offset){
+    return db.query(`
+    SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday 
+    FROM customers 
+    WHERE cpf LIKE $1 || '%'
+    LIMIT $2
+    OFFSET $3
+    `, [cpf, limit, offset])
 }
 
 function getById(id) {
@@ -26,6 +41,7 @@ function update(id, name, phone, cpf, birthday) {
 
 const customersRepositories = {
     getAll,
+    getCustomerByCpf,
     getById,
     findByCpf,
     create,
