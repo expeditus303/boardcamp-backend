@@ -9,4 +9,6 @@ const configDatabase = {
 
 const db = new Pool(configDatabase)
 
+if (process.env.MODE === "prod") db.ssl = true;
+
 export default db
