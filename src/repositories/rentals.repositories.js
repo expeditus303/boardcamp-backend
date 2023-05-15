@@ -1,18 +1,47 @@
 import db from "../config/database.connection.js";
 
-function getAll(order, desc, limit, offset) {
+function getAll(status, startDate, order, desc, limit, offset) {
 
-  return db.query(`
+  let query = `
     SELECT r.*, 
         jsonb_build_object('id', c.id, 'name', c.name) AS customer, 
         jsonb_build_object('id', g.id, 'name', g.name) AS game 
     FROM rentals AS r 
     JOIN customers AS c ON r."customerId" = c.id
     JOIN games AS g ON r."gameId" = g.id
-    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
-    LIMIT $1
-    OFFSET $2
-    `, [limit, offset]);
+  `
+
+  let whereClause = "";
+
+  if (status === "open") {
+    whereClause = ' WHERE r."returnDate" IS NULL';
+
+  } else if (status === "closed") {
+    whereClause = ' WHERE r."returnDate" IS NOT NULL';
+
+  }
+
+  if (whereClause && startDate){
+    whereClause += `AND r."rentDate" > '${startDate}'`
+  } else if (!whereClause && startDate) {
+    whereClause = `WHERE r."rentDate" > '${startDate}'`
+  }
+
+  query += whereClause
+
+  if (order) {
+    query += `
+    ORDER BY "${order}" ${desc ? "DESC" : "ASC"}
+    `
+  }
+
+  query += `
+  LIMIT $1
+  OFFSET $2
+  `
+
+  console.log(query)
+  return db.query(query, [limit, offset])
 }
 
 function getRentalById(customerId, gameId, order, desc, limit, offset) {

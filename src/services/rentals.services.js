@@ -1,15 +1,15 @@
 import error from "../errors/errors.js"
 import rentalsRepositories from "../repositories/rentals.repositories.js"
 
-async function get(customerId, gameId, order, desc, limit, offset) {
+async function get(customerId, gameId, status, startDate, order, desc, limit, offset) {
 
     if (customerId || gameId) {
-        const {rows: rentals} = await rentalsRepositories.getRentalById(customerId, gameId, order, desc, limit, offset)
+        const {rows: rentals} = await rentalsRepositories.getRentalById(customerId, gameId, status, startDate, order, desc, limit, offset)
         
         return rentals    
     }
 
-    const {rows: rentals} = await rentalsRepositories.getAll(order, desc, limit, offset)
+    const {rows: rentals} = await rentalsRepositories.getAll(status, startDate, order, desc, limit, offset)
     
     return rentals
 }

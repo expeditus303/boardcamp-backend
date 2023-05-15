@@ -3,11 +3,11 @@ import rentalsServices from "../services/rentals.services.js"
 
 async function getAll(req, res, next){
 
-    const { customerId, gameId, order, desc, limit, offset} = req.query
+    const { customerId, gameId, status, startDate, order, desc, limit, offset} = req.query
 
     try {
         
-        const rentals = await rentalsServices.get(customerId, gameId, order, desc, limit, offset)
+        const rentals = await rentalsServices.get(customerId, gameId, status, startDate, order, desc, limit, offset)
 
         return res.status(StatusCodes.OK).send(rentals)
     } catch (err) {
