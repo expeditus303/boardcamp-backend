@@ -1,6 +1,6 @@
 import db from "../config/database.connection.js";
 
-function getAll(limit, offset) {
+function getAll(order, desc, limit, offset) {
 
   return db.query(`
     SELECT r.*, 
@@ -9,12 +9,13 @@ function getAll(limit, offset) {
     FROM rentals AS r 
     JOIN customers AS c ON r."customerId" = c.id
     JOIN games AS g ON r."gameId" = g.id
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $1
     OFFSET $2
     `, [limit, offset]);
 }
 
-function getRentalById(customerId, gameId, limit, offset) {
+function getRentalById(customerId, gameId, order, desc, limit, offset) {
   return db.query(`
     SELECT r.*, 
         jsonb_build_object('id', c.id, 'name', c.name) AS customer, 
@@ -24,6 +25,7 @@ function getRentalById(customerId, gameId, limit, offset) {
     JOIN games AS g ON r."gameId" = g.id
     WHERE r."customerId" = $1
       OR r."gameId" = $2
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $3
     OFFSET $4
     `, [customerId, gameId, limit, offset]);

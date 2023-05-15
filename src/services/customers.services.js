@@ -1,14 +1,15 @@
 import error from "../errors/errors.js"
 import customersRepositories from "../repositories/customers.repositories.js"
 
-async function get(cpf, limit, offset) {
+async function get(cpf, order, desc, limit, offset) {
 
     if (cpf) {
-        const { rows: customers } = await customersRepositories.getCustomerByCpf(cpf, limit, offset)
+        const { rows: customers } = await customersRepositories.getCustomerByCpf(cpf, order, desc, limit, offset)
         return customers
 
     } else {
-        const { rows: customers } = await customersRepositories.getAll(limit, offset)
+        console.log(order)
+        const { rows: customers } = await customersRepositories.getAll(order, desc, limit, offset)
         return customers
     }
 

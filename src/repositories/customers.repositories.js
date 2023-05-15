@@ -1,19 +1,21 @@
 import db from "../config/database.connection.js";
 
-function getAll(limit, offset){
+function getAll(order, desc, limit, offset){
     return db.query(`
     SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday 
     FROM customers
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $1
     OFFSET $2
     `, [limit, offset])
 }
 
-function getCustomerByCpf(cpf, limit, offset){
+function getCustomerByCpf(cpf, order, desc, limit, offset){
     return db.query(`
     SELECT *, TO_CHAR(birthday, 'YYYY-MM-DD') AS birthday 
     FROM customers 
     WHERE cpf LIKE $1 || '%'
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $2
     OFFSET $3
     `, [cpf, limit, offset])

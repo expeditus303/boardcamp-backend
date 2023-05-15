@@ -4,11 +4,11 @@ import customersServices from '../services/customers.services.js';
 
 async function getAll(req, res, next) {
 
-  const { cpf, limit, offset  } = req.query
+  const { cpf, order, desc, limit, offset } = req.query
 
   try {
 
-    const customers = await customersServices.get(cpf, limit, offset)
+    const customers = await customersServices.get(cpf, order, desc, limit, offset)
 
     res.status(StatusCodes.OK).send(customers)
   } catch (err) {

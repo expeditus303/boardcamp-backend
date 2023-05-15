@@ -1,16 +1,19 @@
 import db from "../config/database.connection.js";
 
-function getAll(limit, offset){
+function getAll(order, desc, limit, offset){
     return db.query(`
     SELECT * FROM games 
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $1
-    OFFSET $2`, [limit, offset])
+    OFFSET $2
+    `, [limit, offset])
 }
 
-function getGameByName(gameName, limit, offset){
+function getGameByName(gameName, order, desc, limit, offset){
     return db.query(`
     SELECT * FROM games 
     WHERE name ILIKE $1 || '%'
+    ORDER BY "${order ? order : "id" }" ${desc ? "DESC" : "ASC"}
     LIMIT $2
     OFFSET $3
     `, [gameName, limit, offset])

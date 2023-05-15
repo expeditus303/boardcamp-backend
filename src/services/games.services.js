@@ -1,15 +1,15 @@
 import error from "../errors/errors.js";
 import gamesRepositories from "../repositories/games.repositories.js";
 
-async function get(gameName, limit, offset) {
+async function get(gameName, order, desc, limit, offset) {
   if (gameName) {
 
-    const { rows: games } = await gamesRepositories.getGameByName(gameName, limit, offset);
+    const { rows: games } = await gamesRepositories.getGameByName(gameName, order, desc, limit, offset);
 
     return games;
 
   } else {
-    const { rows: games } = await gamesRepositories.getAll(limit, offset);
+    const { rows: games } = await gamesRepositories.getAll(order, desc, limit, offset);
 
     return games;
   }

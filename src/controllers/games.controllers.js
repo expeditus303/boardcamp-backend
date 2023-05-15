@@ -3,10 +3,10 @@ import gamesServices from "../services/games.services.js"
 
 async function getAll(req, res, next) {
 
-    const { name: gameName, limit, offset } = req.query
+    const { name: gameName, order, desc, limit, offset } = req.query
 
     try {
-        const games = await gamesServices.get(gameName, limit, offset)
+        const games = await gamesServices.get(gameName, order, desc, limit, offset)
 
         res.status(StatusCodes.OK).send(games)
     } catch (err) {
