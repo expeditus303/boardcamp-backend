@@ -41,21 +41,27 @@ function findRentalById(id){
     return db.query(`SELECT * FROM rentals WHERE id=$1`, [id])
 }
 
-function updateRentalById(id){
+function updateRentalById(id, gameId){
     return db.query(`
-    UPDATE rentals
-    SET "returnDate" = CASE  
-            WHEN "returnDate" IS NULL THEN
-                NOW()
-            ELSE "returnDate"
-        END,
-        "delayFee" = CASE
-            WHEN CURRENT_DATE > ("rentDate" + "daysRented") THEN
-                ("originalPrice" / "daysRented") * (CURRENT_DATE - ("rentDate" + "daysRented"))
-            ELSE "delayFee"
-        END
-    WHERE rentals.id = $1;
-    `, [id])
+    WITH update_rental AS (
+      UPDATE rentals
+      SET "returnDate" = CASE  
+              WHEN "returnDate" IS NULL THEN
+                  NOW()
+              ELSE "returnDate"
+          END,
+          "delayFee" = CASE
+              WHEN CURRENT_DATE > ("rentDate" + "daysRented") THEN
+                  ("originalPrice" / "daysRented") * (CURRENT_DATE - ("rentDate" + "daysRented"))
+              ELSE "delayFee"
+          END
+      WHERE rentals.id = $1
+  )
+  UPDATE games 
+  SET "stockTotal" = "stockTotal" + 1
+  WHERE id = $2;
+  
+    `, [id, gameId])
 }
 
 function deleteRentalById(id){

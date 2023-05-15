@@ -41,7 +41,9 @@ async function closeRental(id){
 
     if(existingRental.returnDate !== null) throw error.badRequest()
 
-    return await rentalsRepositories.updateRentalById(id)
+    const gameId = existingRental.gameId
+
+    return await rentalsRepositories.updateRentalById(id, gameId)
 }
 
 async function deleteRental(id) {
