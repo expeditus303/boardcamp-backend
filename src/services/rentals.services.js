@@ -19,8 +19,10 @@ async function create(body){
 
     const {rows: [existingGame]} = await rentalsRepositories.findGameById(gameId)
     const {rows: [existingUser]} = await rentalsRepositories.findCustomerById(customerId)
+    
+    const {rows: [{rentalsOpened}]} = await rentalsRepositories.countRentalsOpenFromGameId(gameId)
 
-    if(!existingGame || !existingUser || existingGame.stockTotal < 1) throw error.badRequest()
+    if(!existingGame || !existingUser || rentalsOpened >= existingGame.stockTotal ) throw error.badRequest()
 
     const { pricePerDay } = existingGame
 

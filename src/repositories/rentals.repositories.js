@@ -68,19 +68,21 @@ function findCustomerById(customerId) {
   return db.query(`SELECT * FROM customers WHERE id=$1`, [customerId]);
 }
 
+function countRentalsOpenFromGameId(gameId) {
+  return db.query(`
+  SELECT COUNT(*) AS "rentalsOpened"
+  FROM rentals
+  WHERE "gameId" = $1
+  `, [gameId])
+}
+
 function create(rental) {
   const rentalValuesArray = Object.values(rental);
 
   return db.query(
     `
-    WITH inserted_rental AS (
     INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented", "returnDate", "originalPrice", "delayFee")
     VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING id
-    )
-    UPDATE games 
-    SET "stockTotal" = "stockTotal" - 1
-    WHERE id = $2
     `,
     rentalValuesArray
   );
@@ -90,9 +92,8 @@ function findRentalById(id){
     return db.query(`SELECT * FROM rentals WHERE id=$1`, [id])
 }
 
-function updateRentalById(id, gameId){
+function updateRentalById(id){
     return db.query(`
-    WITH update_rental AS (
       UPDATE rentals
       SET "returnDate" = CASE  
               WHEN "returnDate" IS NULL THEN
@@ -105,12 +106,7 @@ function updateRentalById(id, gameId){
               ELSE "delayFee"
           END
       WHERE rentals.id = $1
-  )
-  UPDATE games 
-  SET "stockTotal" = "stockTotal" + 1
-  WHERE id = $2;
-  
-    `, [id, gameId])
+    `, [id])
 }
 
 function deleteRentalById(id){
@@ -122,6 +118,7 @@ const rentalsRepositories = {
     getRentalById,
     findGameById,
     findCustomerById,
+    countRentalsOpenFromGameId,
     create,
     findRentalById,
     updateRentalById,
