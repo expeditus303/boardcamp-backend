@@ -1,7 +1,6 @@
-import express, { json } from "express"
+import express from "express"
 import cors from "cors"
 import "dotenv/config"
-// import "express-async-errors";
 import routes from "./routes/app.routes.js";
 import errorsMiddleware from "./middlewares/errors.middleware.js";
 

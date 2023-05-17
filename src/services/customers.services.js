@@ -36,9 +36,9 @@ async function create(body) {
 async function update(id, body) {
     const { name, phone, cpf, birthday } = body
 
-    const { rows: existingCustomerCpf } = await customersRepositories.findByIdAndCpf(id, cpf)
+    const { rows: [existingCustomerCpf] } = await customersRepositories.findByIdAndCpf(id, cpf)
 
-    if (existingCustomerCpf[0]) throw error.conflit()
+    if (existingCustomerCpf) throw error.conflit()
 
     return await customersRepositories.update(id, name, phone, cpf, birthday)
 }

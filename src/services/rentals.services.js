@@ -17,8 +17,9 @@ async function get(customerId, gameId, status, startDate, order, desc, limit, of
 async function create(body){
     const { customerId, gameId, daysRented} = body
 
-    const {rows: [existingGame]} = await rentalsRepositories.findGameById(gameId)
     const {rows: [existingUser]} = await rentalsRepositories.findCustomerById(customerId)
+    
+    const {rows: [existingGame]} = await rentalsRepositories.findGameById(gameId)
     
     const {rows: [{rentalsOpened}]} = await rentalsRepositories.countRentalsOpenFromGameId(gameId)
 

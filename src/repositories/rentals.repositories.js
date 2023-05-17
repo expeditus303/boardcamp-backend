@@ -72,7 +72,7 @@ function countRentalsOpenFromGameId(gameId) {
   return db.query(`
   SELECT COUNT(*) AS "rentalsOpened"
   FROM rentals
-  WHERE "gameId" = $1
+  WHERE "gameId" = $1 AND "returnDate" IS NULL
   `, [gameId])
 }
 
